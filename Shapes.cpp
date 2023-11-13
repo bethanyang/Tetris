@@ -22,7 +22,7 @@ Shapes::Shapes(int color, int arr[20][10]) {
 	else if (color_ == 4) {
 		colorFour(arr);
 	}
-	else if (color_ == 5){
+	else if (color_ == 5) {
 		colorFive(arr);
 	}
 	else if (color_ == 6) {
@@ -36,24 +36,48 @@ int Shapes::getColor() {
 //change horizontal position based on input
 void Shapes::updateHorizontalPosition(int arr[20][10], char letterEntered) {
 	bool ableToMove = true;
+	int temp = 0; //for swapping later
 	//if its g we are moving to the left 
 	if (letterEntered == 'g') {
 		for (int row = 0; row < positionLength_; row++) {
 			for (int col = 0; col < 2; col++) {
-				if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) - 1] == 0) {
-					ableToMove = true;//check if 
+				if (((coordinates_[row][col + 1]) - 1) > -1){
+					if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) - 1] == 0) {
+						ableToMove = true;//check if 
+					}
+					else {
+						break;
+					}
 				}
-				else{
-					break;
-				}
+	
 			}
 		}
+
 		for (int r = 0; r < positionLength_; r++) {
-			for (int c = 0; c < 2; c++) {
-				//switches current value and value to the left on the grid
-				swap(arr[coordinates_[r][c]][coordinates_[r][c+1]], arr[coordinates_[r][c]][coordinates_[r][c - 1]]);
+			for (int c = 0; c < 1; c++) {
+				
+					//switches current value and value to the left on the grid
+					temp = arr[coordinates_[r][c]][coordinates_[r][c + 1]];
+					//takes current position(x) of each box and moves it to the left one on the grid
+					arr[coordinates_[r][c]][coordinates_[r][c + 1]] = arr[coordinates_[r][c]][(coordinates_[r][c + 1]) - 1];
+					//takes (x) and changes it to 0 i hope this is so tragic
+					arr[coordinates_[r][c]][(coordinates_[r][c + 1])-1] = temp;
+				
 			}
 		}
+		
+		for (int r = 0; r < positionLength_; r++) {
+			coordinates_[r][1] = (coordinates_[r][1]) - 1;
+		}
+
+		for (int row = 0; row < positionLength_; row++) {
+			for (int col = 0; col < 2; col++) {
+				cout << coordinates_[row][col];
+			}
+			cout << endl;
+		}
+
+		cout << endl << "finished this trama" << endl;
 	}
 	//check grid to see if x value -1 of coordinates = 0 
 	//if it is move x coordinates to left one which means - 1
@@ -237,4 +261,5 @@ void Shapes::colorSix(int arr[20][10]) {
 	setfillstyle(SOLID_FILL, BLUE);
 	bar(160, 0, 240, 80);
 }
+
 
