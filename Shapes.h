@@ -12,28 +12,23 @@ public:
 	Shapes();
 	Shapes(int color, int arr[20][10]);
 
-	void updatePosition(int arr[20][10]);
+
 	int getColor();
+	void updateHorizontalPosition(int arr[20][10], char letterEntered);
 	void colorOne(int arr[20][10]);
-	int colorTwo(int arr[20][10]);
+	void colorTwo(int arr[20][10]);
+	void colorThree(int arr[20][10]);
+	void colorFour(int arr[20][10]);
+	void colorFive(int arr[20][10]);
+	void colorSix(int arr[20][10]);
 
 private:
 	//integer that corresponds to color
 	int color_;
-	//how many squares the shape occupies
-	int positionLength_;
-	//each map will have a specific shape 
-	//it should keep changing until the shape is set
-	int** coordinates_ = nullptr;
-	/*int color;
-
-	Shapes(int x) {
-		color = x;
-		//generate a random shape and then give it a color
-	}
-	void setInitialPosition(int& a[][]) {
-		cout << "taco";
-	}*/
+	//every shape occupies 4 squares
+	int positionLength_ = 4;
+	//holds the coordinates that the current shape occupies
+	int coordinates_[4][4];
 
 };
 
