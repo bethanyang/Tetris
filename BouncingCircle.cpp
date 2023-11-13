@@ -1,3 +1,4 @@
+
 // BouncingCircle.cpp - v3, 2023-08
 // Edited by: PUT YOUR NAME HERE, and the DATE
 //
@@ -47,8 +48,15 @@ int main()
 		}
 	}
 	//declaring current shape 
-	Shapes newShape(1, grid);
+	Shapes currentShape(6, grid);
 
+	//for testing what is inside of the grid
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			cout << grid[r][c];
+		}
+		cout << endl;
+	}
 
 	//random int for construcor color
 	/*
@@ -96,7 +104,7 @@ int main()
 
 
 
-	cout << "meow";
+	cout << "meow" << endl;
 	//for testing what is inside of the grid
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
@@ -107,9 +115,16 @@ int main()
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
 		delay(60);
-
-
-
+		if (kbhit()) {
+			keyPressed = getch();
+			if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
+				keepGoing = false;
+			}
+			if (keyPressed == 'g') {
+				cout << "key = g";
+				currentShape.updateHorizontalPosition(grid, keyPressed);
+			}
+		}
 	} // end while keepGoing
 	
 	closegraph(); // shut down the graphics window
