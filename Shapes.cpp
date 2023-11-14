@@ -40,13 +40,15 @@ void Shapes::updateHorizontalPosition(int arr[20][10], char letterEntered) {
 	//if its g we are moving to the left 
 	if (letterEntered == 'g') {
 		for (int row = 0; row < positionLength_; row++) {
-			for (int col = 0; col < 2; col++) {
+			for (int col = 0; col < 1; col++) {
 				if (((coordinates_[row][col + 1]) - 1) > -1){
 					if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) - 1] == 0) {
-						ableToMove = true;//check if 
+						ableToMove = true;//check if
+						cout << "equals 0 " << endl;
 					}
 					else {
-						break;
+						cout << "returning nothing";
+						return;
 					}
 				}
 	
@@ -69,7 +71,6 @@ void Shapes::updateHorizontalPosition(int arr[20][10], char letterEntered) {
 		for (int r = 0; r < positionLength_; r++) {
 			coordinates_[r][1] = (coordinates_[r][1]) - 1;
 		}
-
 		for (int row = 0; row < positionLength_; row++) {
 			for (int col = 0; col < 2; col++) {
 				cout << coordinates_[row][col];
@@ -78,6 +79,22 @@ void Shapes::updateHorizontalPosition(int arr[20][10], char letterEntered) {
 		}
 
 		cout << endl << "finished this trama" << endl;
+	}
+	else if (letterEntered == 'j') {
+		cout << "they enertered j";
+		for (int row = 0; row < positionLength_; row++) {
+			for (int col = 0; col < 2; col++) {
+				if (((coordinates_[row][col + 1]) + 1) > 9) {
+					if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) + 1] == 0) {
+						ableToMove = true;//check if 
+					}
+					else {
+						break;
+					}
+				}
+
+			}
+		}
 	}
 	//check grid to see if x value -1 of coordinates = 0 
 	//if it is move x coordinates to left one which means - 1
@@ -261,5 +278,4 @@ void Shapes::colorSix(int arr[20][10]) {
 	setfillstyle(SOLID_FILL, BLUE);
 	bar(160, 0, 240, 80);
 }
-
 
