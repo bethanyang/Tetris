@@ -24,7 +24,6 @@ using namespace std;
 
 //functions
 void printGrid(int arr[20][10]);
-void displayShapes();
 
 int main()
 {
@@ -59,24 +58,24 @@ int main()
 	4 = backward dark blue l
 	5 = green
 	6 = red
-	
+
 	*/
 	random_device generator;
 	uniform_int_distribution<int> randomInt(1, 7);
 	randColor = randomInt(generator);
-	cout << randColor<< endl;
+	cout << randColor << endl;
 
 
 	//declaring each shape object
-	
-	
-	
+
+
+
 	//creates grid 
 	setcolor(WHITE);
 	setlinestyle(SOLID_LINE, 0, 1);
 	//line
-	
-	for (int r = 40; r < 800; r+= 40) {
+
+	for (int r = 40; r < 800; r += 40) {
 		line(0, r, 400, r);
 	}
 	line(0, 800, 400, 800);
@@ -85,19 +84,7 @@ int main()
 		line(c, 0, c, 800);
 	}
 	line(400, 0, 400, 800);
-	
 
-
-	
-
-	
-
-	
-
-
-
-
-	cout << "meow" << endl;
 	//for testing what is inside of the grid
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
@@ -105,37 +92,42 @@ int main()
 		}
 		cout << endl;
 	}
-	cout << "\n\n\n";
+
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
-		delay(60);
+		delay(1000);
 		if (kbhit()) {
 			keyPressed = getch();
 			if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
 				keepGoing = false;
 			}
-			if (keyPressed == 'g' || keyPressed == 'j') {
-				cout << "key = g";
-				currentShape.updateHorizontalPosition(grid, keyPressed);
+			if (keyPressed == 'g') {
+				if (currentShape.updateLeftHorizontalPosition(grid, keyPressed)) {
+					currentShape.moveHorizontal(grid, keyPressed);
+				}
 				printGrid(grid);
 			}
-		}
+			if (keyPressed == 'j') {
+				cout << "pressed j" << endl;
+				if (currentShape.updateRightHorizontalPosition(grid, keyPressed)) {
+					currentShape.moveHorizontal(grid, keyPressed);
+				}
+				printGrid(grid);
+			}
 
-		
-	} // end while keepGoing
+		}
+		currentShape.fall(grid);
+		printGrid(grid);
+	}
+// end while keepGoing
 	//for testing what is inside of the grid
 	closegraph(); // shut down the graphics window
+	printGrid(grid);
 	return 0;
 
 } // end main()
 
 
-
-void displayShapes(vector<Shapes> shape) {
-	for (int i = 0; i < shape.size(); i++) {
-		cout << "meow";
-	}
-}
 void printGrid(int arr[20][10]) {
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
