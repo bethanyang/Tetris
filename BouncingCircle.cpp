@@ -25,26 +25,26 @@ using namespace std;
 //functions
 void printGrid(int arr[20][10]);
 void displayGraph(int arr[20][10], int color);
+void showScore(int score);
 int main()
 {
 	//Variable Declarations
 	int randColor = 0;
 	bool keepGoing = true;       // keep running while this is true
 	char keyPressed;
-
+	int score = 0;
 	//declaring array for grid
 	int grid[20][10];
 
 	// Open a graphics window size 400 pixels wide x 800 pixels high
-	initwindow(413, 813);
+	initwindow(413, 1000);
 	//putting 0 in every place which represents an empty slot
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
 			grid[r][c] = 0;
 		}
 	}
-	//declaring current shape 
-	Shapes currentShape(4, grid);
+
 
 
 	//random int for construcor color
@@ -60,15 +60,17 @@ int main()
 	random_device generator;
 	uniform_int_distribution<int> randomInt(1, 6);
 	randColor = randomInt(generator);
-	cout << randColor << endl;
+	//declaring current shape 
+	Shapes currentShape(randColor, grid);
 
-
+	int delayPace = 500;
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
-		delay(500);
+		delay(delayPace);
 		if (currentShape.set(grid)) {
+			delayPace = 500;
 			randColor = randomInt(generator);
-			currentShape = Shapes(4, grid);
+			currentShape = Shapes(randColor, grid);
 		}
 		currentShape.fall(grid);
 		displayGraph(grid, currentShape.getColor());
@@ -92,20 +94,22 @@ int main()
 				printGrid(grid);
 			}
 			if (keyPressed == 'j') {
-				cout << "pressed j" << endl;
 				if (currentShape.updateRightHorizontalPosition(grid, keyPressed)) {
 					currentShape.moveHorizontal(grid, keyPressed);
 				}
 				printGrid(grid);
 			}
+			if (keyPressed == ' ') {
+				delayPace = 10;
+			}
 			displayGraph(grid, currentShape.getColor());
 
 		}
-		cout << "new grid";
+
 		printGrid(grid);
 	}
-// end while keepGoing
-	//for testing what is inside of the grid
+	// end while keepGoing
+		//for testing what is inside of the grid
 	closegraph(); // shut down the graphics window
 	//printGrid(grid);
 	return 0;
@@ -121,6 +125,16 @@ void printGrid(int arr[20][10]) {
 		cout << endl;
 	}
 }
+
+void showScore(int score) {
+	// Draw score on the screen
+	char s[20];
+	sprintf_s(s, "Score: %d", score);
+
+	setcolor(WHITE);
+	outtextxy(800, 20, &s[0]);
+}
+
 void displayGraph(int arr[20][10], int color) {
 	//sees what color is the shape
 	string COLOR;
@@ -129,7 +143,7 @@ void displayGraph(int arr[20][10], int color) {
 		COLOR = "YELLOW";
 		break;
 
-	case 2: 
+	case 2:
 		COLOR = "CYAN";
 		break;
 
@@ -141,10 +155,10 @@ void displayGraph(int arr[20][10], int color) {
 		COLOR = "BLUE";
 		break;
 
-	case 5: 
+	case 5:
 		COLOR = "GREEN";
 		break;
-	
+
 	case 6:
 		COLOR = "RED";
 	}
@@ -167,7 +181,7 @@ void displayGraph(int arr[20][10], int color) {
 				setcolor(BLACK);
 				setfillstyle(SOLID_FILL, BLACK);
 				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
-			
+
 			}
 		}
 	}
