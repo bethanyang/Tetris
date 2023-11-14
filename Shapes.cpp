@@ -331,7 +331,6 @@ void Shapes::colorThree(int arr[20][10]) {
 }
 
 void Shapes::colorFour(int arr[20][10]) {
-	cout << "color 4";
 	arr[0][5] = 2;
 	arr[1][5] = 2;
 	arr[2][5] = 2;
@@ -354,10 +353,9 @@ void Shapes::colorFour(int arr[20][10]) {
 	2, 5
 	2, 4
 	*/
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(BLUE);
-	setfillstyle(SOLID_FILL, BLUE);
-	bar(160, 0, 240, 80);
+
+	cout << " end constructor";
+ 
 }
 
 void Shapes::colorFive(int arr[20][10]) {
