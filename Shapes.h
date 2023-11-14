@@ -13,7 +13,7 @@ public:
 	Shapes(int color, int arr[20][10]);
 
 
-	void setColor(int c);
+	int getColor();
 	bool gameOver(int arr[20][10]);
 	bool canClear(int arr[20][10], int row);
 	void clearLine(int arr[20][10], int row);
