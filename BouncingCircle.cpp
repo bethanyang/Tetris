@@ -30,7 +30,6 @@ int main()
 	//Variable Declarations
 	int randColor = 0;
 	bool keepGoing = true;       // keep running while this is true
-	vector <Shapes> shape;
 	char keyPressed;
 
 	//declaring array for grid
@@ -38,8 +37,6 @@ int main()
 
 	// Open a graphics window size 400 pixels wide x 800 pixels high
 	initwindow(413, 813);
-
-
 	//putting 0 in every place which represents an empty slot
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
@@ -47,7 +44,7 @@ int main()
 		}
 	}
 	//declaring current shape 
-	Shapes currentShape(1, grid);
+	Shapes currentShape(4, grid);
 
 
 	//random int for construcor color
@@ -61,14 +58,9 @@ int main()
 
 	*/
 	random_device generator;
-	uniform_int_distribution<int> randomInt(1, 7);
+	uniform_int_distribution<int> randomInt(1, 6);
 	randColor = randomInt(generator);
 	cout << randColor << endl;
-
-
-	//declaring each shape object
-
-
 
 	//creates grid 
 	setcolor(WHITE);
@@ -95,7 +87,20 @@ int main()
 
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
-		delay(1000);
+		delay(500);
+		if (currentShape.set(grid)) {
+			randColor = randomInt(generator);
+			currentShape = Shapes(1, grid);
+		}
+		currentShape.fall(grid);
+		for (int r = 19; r >= 0; r--) {
+			if (currentShape.canClear(grid, r)) {
+				currentShape.clearLine(grid, r);
+			}
+		}
+		if (currentShape.gameOver(grid)) {
+			keepGoing = false;
+		}
 		if (kbhit()) {
 			keyPressed = getch();
 			if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
@@ -116,16 +121,16 @@ int main()
 			}
 
 		}
-		currentShape.fall(grid);
+		cout << "new grid";
 		printGrid(grid);
 	}
 // end while keepGoing
 	//for testing what is inside of the grid
 	closegraph(); // shut down the graphics window
-	printGrid(grid);
+	//printGrid(grid);
 	return 0;
 
-} // end main()
+}
 
 
 void printGrid(int arr[20][10]) {
