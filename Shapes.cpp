@@ -10,6 +10,7 @@ Shapes::Shapes() {}
 
 Shapes::Shapes(int color, int arr[20][10]) {
 	this->color_ = color;
+
 	if (color_ == 1) {
 		colorOne(arr);
 	}
@@ -32,6 +33,65 @@ Shapes::Shapes(int color, int arr[20][10]) {
 
 int Shapes::getColor() {
 	return this->color_;
+}
+//set shape into 1s 
+bool Shapes::set(int arr[20][10]) {
+	bool isSet = false;
+	int posX, posY;
+	for (int i = 0; i < 4; i++) {
+		posX = coordinates_[i][1];
+		posY = coordinates_[i][0];
+	}
+	//look at coordinates 
+	//set those coordinates in the grid to 1
+	//if its on last row or there 1 under 
+
+
+
+}
+
+//makes the shape fall by one box 
+void Shapes::fall(int arr[20][10]){
+	// get y value in the coordinates 
+	//check to see if that y value under grid is 0 or itself if true everything moves down a box
+	//update coordinates to reflect that 
+	int temp; //gonna start crying really quick
+	bool ableToMove = true;
+	int posX, posY;
+	for (int i = 0; i < 4; i++) {
+		posX = coordinates_[i][1];
+		posY = coordinates_[i][0];
+		if (posY + 1 < 20) {
+			if (arr[posY + 1][posX] == 0 || arr[posY + 1][posX] == 2) {
+				ableToMove = true;
+			}
+			else {
+				return;
+			};
+		}
+		else {
+			return; 
+		}
+	}
+	for (int i = 3; i >= 0; i--) {
+		posX = coordinates_[i][1];
+		posY = coordinates_[i][0];
+		arr[posY][posX] = 0;
+		arr[posY+1][posX] = 2;
+	}
+	//changes coordinates of the object 
+	for (int r = 0; r < positionLength_; r++) {
+		coordinates_[r][0] = coordinates_[r][0]+1;
+	}
+	for (int row = 0; row < positionLength_; row++) {
+		for (int col = 0; col < 2; col++) {
+			cout << coordinates_[row][col];
+		}
+		cout << endl;
+	}
+
+
+
 }
 //moves horiontally updates grid and coorindates
 void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
@@ -96,16 +156,13 @@ bool Shapes::updateLeftHorizontalPosition(int arr[20][10], char letterEntered) {
 		if (posX != 0) {
 			if (arr[posY][posX - 1] == 0 || arr[posY][posX - 1] == 2) {
 				ableToMove = true;
-				cout << "inner if " << endl;
 			}
 			else {
-				cout << "first else";
 				return false;
 			}
 
 		}
 		else {
-			cout << "second else";
 			return false;
 		}
 	}
@@ -121,16 +178,13 @@ bool Shapes::updateRightHorizontalPosition(int arr[20][10], char letterEntered) 
 		if (posX != 9) {
 			if (arr[posY][posX + 1] == 0 || arr[posY][posX + 1] == 2) {
 				ableToMove = true;
-				cout << "inner if " << endl;
 			}
 			else {
-				cout << "first else";
 				return false;
 			}
 
 		}
 		else {
-			cout << "second else";
 			return false;
 		}
 	}
@@ -322,5 +376,4 @@ void Shapes::colorSix(int arr[20][10]) {
 	setfillstyle(SOLID_FILL, BLUE);
 	bar(160, 0, 240, 80);
 }
-
 
