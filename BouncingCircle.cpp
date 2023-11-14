@@ -1,4 +1,3 @@
-
 // BouncingCircle.cpp - v3, 2023-08
 // Edited by: PUT YOUR NAME HERE, and the DATE
 //
@@ -24,6 +23,7 @@ using namespace std;
 
 
 //functions
+void printGrid(int arr[20][10]);
 void displayShapes();
 
 int main()
@@ -48,15 +48,8 @@ int main()
 		}
 	}
 	//declaring current shape 
-	Shapes currentShape(6, grid);
+	Shapes currentShape(1, grid);
 
-	//for testing what is inside of the grid
-	for (int r = 0; r < 20; r++) {
-		for (int c = 0; c < 10; c++) {
-			cout << grid[r][c];
-		}
-		cout << endl;
-	}
 
 	//random int for construcor color
 	/*
@@ -112,6 +105,7 @@ int main()
 		}
 		cout << endl;
 	}
+	cout << "\n\n\n";
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
 		delay(60);
@@ -120,15 +114,19 @@ int main()
 			if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
 				keepGoing = false;
 			}
-			if (keyPressed == 'g') {
+			if (keyPressed == 'g' || keyPressed == 'j') {
 				cout << "key = g";
 				currentShape.updateHorizontalPosition(grid, keyPressed);
+				printGrid(grid);
 			}
 		}
+
+		
 	} // end while keepGoing
-	
+	//for testing what is inside of the grid
 	closegraph(); // shut down the graphics window
 	return 0;
+
 } // end main()
 
 
@@ -136,5 +134,13 @@ int main()
 void displayShapes(vector<Shapes> shape) {
 	for (int i = 0; i < shape.size(); i++) {
 		cout << "meow";
+	}
+}
+void printGrid(int arr[20][10]) {
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			cout << arr[r][c];
+		}
+		cout << endl;
 	}
 }
