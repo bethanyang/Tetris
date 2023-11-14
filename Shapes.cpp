@@ -44,23 +44,22 @@ void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
 		shift = 1;
 	}
 	int posX, posY;
-	for (int r = 3; r >= 0; r--) {
-		posX = coordinates_[r][1];
-		posY = coordinates_[r][0];
-		//switches current value and value to the left on the grid
-		temp = arr[posY][posX];
-		//takes current position(x) of each box and moves it to the left one on the grid
-		arr[posY][posX] = arr[posY][posX + shift];
-		//takes (x) and changes it to 0 i hope this is so tragic
-		arr[posY][posX + shift] = temp;
+	if (letterEntered == 'j') {
+		for (int r = 3; r >= 0; r--) {
+			posX = coordinates_[r][1];
+			posY = coordinates_[r][0];
+			//switches current value and value to the left on the grid
+			temp = arr[posY][posX];
+			//takes current position(x) of each box and moves it to the left one on the grid
+			arr[posY][posX] = arr[posY][posX + shift];
+			//takes (x) and changes it to 0 i hope this is so tragic
+			arr[posY][posX + shift] = temp;
+		}
 	}
-	for (int r = 0; r < positionLength_; r++) {
-		coordinates_[r][1] = (coordinates_[r][1]) + shift;
-	}
-/*this works for moving to the left
-	for (int r = 0; r < positionLength_; r++) {
-		posX = coordinates_[r][1];
-		posY = coordinates_[r][0];
+	else if (letterEntered == 'g') {
+		for (int r = 0; r < positionLength_; r++) {
+			posX = coordinates_[r][1];
+			posY = coordinates_[r][0];
 			//switches current value and value to the left on the grid
 			temp = arr[posY][posX];
 			//takes current position(x) of each box and moves it to the left one on the grid
@@ -68,13 +67,14 @@ void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
 			//takes (x) and changes it to 0 i hope this is so tragic
 			arr[posY][posX + shift] = temp;
 
+		}
 	}
+
 	//changes coordinates of the object 
 	for (int r = 0; r < positionLength_; r++) {
 		coordinates_[r][1] = (coordinates_[r][1]) + shift;
-	}*/
-
-	//prints out curent coordinates
+	}
+	//prints out new coordinates 
 	for (int row = 0; row < positionLength_; row++) {
 		for (int col = 0; col < 2; col++) {
 			cout << coordinates_[row][col];
@@ -322,4 +322,5 @@ void Shapes::colorSix(int arr[20][10]) {
 	setfillstyle(SOLID_FILL, BLUE);
 	bar(160, 0, 240, 80);
 }
+
 
