@@ -7,7 +7,7 @@ using namespace std;
 
 class Shapes
 {
-	
+
 public:
 	Shapes();
 	Shapes(int color, int arr[20][10]);
