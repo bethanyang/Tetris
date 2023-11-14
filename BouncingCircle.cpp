@@ -24,7 +24,7 @@ using namespace std;
 
 //functions
 void printGrid(int arr[20][10]);
-void displayGraph(int arr[20][10]);
+void displayGraph(int arr[20][10], int color);
 int main()
 {
 	//Variable Declarations
@@ -66,12 +66,12 @@ int main()
 	// Main Loop - Keep running until user quits (while keepGoing is true)
 	while (keepGoing) {
 		delay(500);
-		displayGraph(grid, currentShape.getColor());
 		if (currentShape.set(grid)) {
 			randColor = randomInt(generator);
 			currentShape = Shapes(4, grid);
 		}
 		currentShape.fall(grid);
+		displayGraph(grid, currentShape.getColor());
 		for (int r = 19; r >= 0; r--) {
 			if (currentShape.canClear(grid, r)) {
 				currentShape.clearLine(grid, r);
@@ -98,6 +98,7 @@ int main()
 				}
 				printGrid(grid);
 			}
+			displayGraph(grid, currentShape.getColor());
 
 		}
 		cout << "new grid";
@@ -121,11 +122,59 @@ void printGrid(int arr[20][10]) {
 	}
 }
 void displayGraph(int arr[20][10], int color) {
+	//sees what color is the shape
+	string COLOR;
+	switch (color) {
+	case 1:
+		COLOR = "YELLOW";
+		break;
+
+	case 2: 
+		COLOR = "CYAN";
+		break;
+
+	case 3:
+		COLOR = "BROWN";
+		break;
+
+	case 4:
+		COLOR = "BLUE";
+		break;
+
+	case 5: 
+		COLOR = "GREEN";
+		break;
+	
+	case 6:
+		COLOR = "RED";
+	}
+
+	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
+
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			if (arr[r][c] == 2) {
+				setcolor(color);
+				setfillstyle(SOLID_FILL, color);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
+			}
+			else if (arr[r][c] == 1) {
+				setcolor(LIGHTGRAY);
+				setfillstyle(SOLID_FILL, LIGHTGRAY);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
+			}
+			else {
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL, BLACK);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
+			
+			}
+		}
+	}
+	//bar(40*4, 40*2, 40 + 160, 40 + 80);
 	//creates grid 
 	setcolor(WHITE);
 	setlinestyle(SOLID_LINE, 0, 1);
-	//line
-
 	for (int r = 40; r < 800; r += 40) {
 		line(0, r, 400, r);
 	}
@@ -135,4 +184,5 @@ void displayGraph(int arr[20][10], int color) {
 		line(c, 0, c, 800);
 	}
 	line(400, 0, 400, 800);
+
 }
