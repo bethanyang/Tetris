@@ -33,75 +33,119 @@ Shapes::Shapes(int color, int arr[20][10]) {
 int Shapes::getColor() {
 	return this->color_;
 }
-//change horizontal position based on input
-void Shapes::updateHorizontalPosition(int arr[20][10], char letterEntered) {
-	bool ableToMove = true;
+//moves horiontally updates grid and coorindates
+void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
 	int temp = 0; //for swapping later
-	//if its g we are moving to the left 
+	int shift;
 	if (letterEntered == 'g') {
-		for (int row = 0; row < positionLength_; row++) {
-			for (int col = 0; col < 1; col++) {
-				if (((coordinates_[row][col + 1]) - 1) > -1){
-					if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) - 1] == 0) {
-						ableToMove = true;//check if
-						cout << "equals 0 " << endl;
-					}
-					else {
-						cout << "returning nothing";
-						return;
-					}
-				}
+		shift = -1;
+	}
+	else {
+		shift = 1;
+	}
+	int posX, posY;
+	for (int r = 3; r >= 0; r--) {
+		posX = coordinates_[r][1];
+		posY = coordinates_[r][0];
+		//switches current value and value to the left on the grid
+		temp = arr[posY][posX];
+		//takes current position(x) of each box and moves it to the left one on the grid
+		arr[posY][posX] = arr[posY][posX + shift];
+		//takes (x) and changes it to 0 i hope this is so tragic
+		arr[posY][posX + shift] = temp;
+	}
+	for (int r = 0; r < positionLength_; r++) {
+		coordinates_[r][1] = (coordinates_[r][1]) + shift;
+	}
+/*this works for moving to the left
+	for (int r = 0; r < positionLength_; r++) {
+		posX = coordinates_[r][1];
+		posY = coordinates_[r][0];
+			//switches current value and value to the left on the grid
+			temp = arr[posY][posX];
+			//takes current position(x) of each box and moves it to the left one on the grid
+			arr[posY][posX] = arr[posY][posX + shift];
+			//takes (x) and changes it to 0 i hope this is so tragic
+			arr[posY][posX + shift] = temp;
+
+	}
+	//changes coordinates of the object 
+	for (int r = 0; r < positionLength_; r++) {
+		coordinates_[r][1] = (coordinates_[r][1]) + shift;
+	}*/
+
+	//prints out curent coordinates
+	for (int row = 0; row < positionLength_; row++) {
+		for (int col = 0; col < 2; col++) {
+			cout << coordinates_[row][col];
+		}
+		cout << endl;
+	}
+
+	cout << endl << "finished this trama" << endl;
+}
+
+//checks to see if you can move left
+bool Shapes::updateLeftHorizontalPosition(int arr[20][10], char letterEntered) {
+	bool ableToMove = true;
+	int posX, posY;
+	//if its g we are moving to the left 
+	for (int i = 0; i < positionLength_; i++) {
+		posY = coordinates_[i][0];
+		posX = coordinates_[i][1];
+		if (posX != 0) {
+			if (arr[posY][posX - 1] == 0 || arr[posY][posX - 1] == 2) {
+				ableToMove = true;
+				cout << "inner if " << endl;
+			}
+			else {
+				cout << "first else";
+				return false;
+			}
+
+		}
+		else {
+			cout << "second else";
+			return false;
+		}
+	}
+	return ableToMove;
+}
+bool Shapes::updateRightHorizontalPosition(int arr[20][10], char letterEntered) {
+	bool ableToMove = true;
+	int posX, posY;
+	//if its g we are moving to the left 
+	for (int i = 0; i < positionLength_; i++) {
+		posY = coordinates_[i][0];
+		posX = coordinates_[i][1];
+		if (posX != 9) {
+			if (arr[posY][posX + 1] == 0 || arr[posY][posX + 1] == 2) {
+				ableToMove = true;
+				cout << "inner if " << endl;
+			}
+			else {
+				cout << "first else";
+				return false;
+			}
+
+		}
+		else {
+			cout << "second else";
+			return false;
+		}
+	}
+	return ableToMove;
+}
+
+
+
 	
-			}
-		}
-
-		for (int r = 0; r < positionLength_; r++) {
-			for (int c = 0; c < 1; c++) {
-				
-					//switches current value and value to the left on the grid
-					temp = arr[coordinates_[r][c]][coordinates_[r][c + 1]];
-					//takes current position(x) of each box and moves it to the left one on the grid
-					arr[coordinates_[r][c]][coordinates_[r][c + 1]] = arr[coordinates_[r][c]][(coordinates_[r][c + 1]) - 1];
-					//takes (x) and changes it to 0 i hope this is so tragic
-					arr[coordinates_[r][c]][(coordinates_[r][c + 1])-1] = temp;
-				
-			}
-		}
-		
-		for (int r = 0; r < positionLength_; r++) {
-			coordinates_[r][1] = (coordinates_[r][1]) - 1;
-		}
-		for (int row = 0; row < positionLength_; row++) {
-			for (int col = 0; col < 2; col++) {
-				cout << coordinates_[row][col];
-			}
-			cout << endl;
-		}
-
-		cout << endl << "finished this trama" << endl;
-	}
-	else if (letterEntered == 'j') {
-		cout << "they enertered j";
-		for (int row = 0; row < positionLength_; row++) {
-			for (int col = 0; col < 2; col++) {
-				if (((coordinates_[row][col + 1]) + 1) > 9) {
-					if (arr[coordinates_[row][col]][(coordinates_[row][col + 1]) + 1] == 0) {
-						ableToMove = true;//check if 
-					}
-					else {
-						break;
-					}
-				}
-
-			}
-		}
-	}
 	//check grid to see if x value -1 of coordinates = 0 
 	//if it is move x coordinates to left one which means - 1
 	//move grid coordinates r - 1 to equal 2 and change previous positions to 0
 
 	//create bool thats true as long as everything to left is always 0
-}
+
 //Each shape 
 void Shapes::colorOne(int arr[20][10]) {
 	arr[0][4] = 2;
