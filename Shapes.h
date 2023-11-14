@@ -13,8 +13,15 @@ public:
 	Shapes(int color, int arr[20][10]);
 
 
-	int getColor();
-	void updateHorizontalPosition(int arr[20][10], char letterEntered);
+	void setColor(int c);
+	bool gameOver(int arr[20][10]);
+	bool canClear(int arr[20][10], int row);
+	void clearLine(int arr[20][10], int row);
+	bool updateLeftHorizontalPosition(int arr[20][10], char letterEntered);
+	bool updateRightHorizontalPosition(int arr[20][10], char letterEntered);
+	void moveHorizontal(int arr[20][10], char letterEntered);
+	bool set(int arr[20][10]);
+	void fall(int arr[20][10]);
 	void colorOne(int arr[20][10]);
 	void colorTwo(int arr[20][10]);
 	void colorThree(int arr[20][10]);
