@@ -42,8 +42,6 @@ void Shapes::clearLine(int arr[20][10], int row) {
 	for (int r = row; r >= 1; r--) {
 		for (int c = 0; c < 10; c++) {
 				arr[r][c] = arr[r - 1][c];
-				cout << "meowww" << endl;
-
 			
 		}
 	}
@@ -74,8 +72,8 @@ bool Shapes::gameOver(int arr[20][10]) {
 	}
 	return done;
 }
-void Shapes::setColor(int c) {
-	 this->color_ = c;
+int Shapes::getColor() {
+	 return this->color_;
 }
 //set shape into 1s 
 bool Shapes::set(int arr[20][10]) {
