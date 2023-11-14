@@ -30,9 +30,52 @@ Shapes::Shapes(int color, int arr[20][10]) {
 		colorSix(arr);
 	}
 }
+void Shapes::clearLine(int arr[20][10], int row) {
+	for (int c = 0; c < 10; c++){
+		arr[row][c] = 0;
+	}
 
-int Shapes::getColor() {
-	return this->color_;
+	//0,0
+	//1,0
+	
+
+	for (int r = row; r >= 1; r--) {
+		for (int c = 0; c < 10; c++) {
+				arr[r][c] = arr[r - 1][c];
+				cout << "meowww" << endl;
+
+			
+		}
+	}
+	
+}
+bool Shapes::canClear(int arr[20][10], int row) {
+	bool clear = false;
+	int posX, posY;
+	for (int c = 0; c < 10; c++) {
+		if (arr[row][c] == 1) {
+			clear = true; 
+		}
+		else {
+			return false;
+		}
+	}
+	return clear;
+}
+bool Shapes::gameOver(int arr[20][10]) {
+	int posX, posY;
+	bool done = false;
+	for (int i = 0; i < 4; i++) {
+		posX = coordinates_[i][1];
+		posY = coordinates_[i][0];
+		if (posY - 1 == -1) {
+			done = true;
+		}
+	}
+	return done;
+}
+void Shapes::setColor(int c) {
+	 this->color_ = c;
 }
 //set shape into 1s 
 bool Shapes::set(int arr[20][10]) {
@@ -41,13 +84,21 @@ bool Shapes::set(int arr[20][10]) {
 	for (int i = 0; i < 4; i++) {
 		posX = coordinates_[i][1];
 		posY = coordinates_[i][0];
+		if (posY + 1 == 20 || arr[posY + 1][posX] == 1) {
+			isSet = true;
+		}
+	}
+	if (isSet) {
+		for (int i = 0; i < 4; i++) {
+			posX = coordinates_[i][1];
+			posY = coordinates_[i][0];
+			arr[posY][posX] = 1;
+		}
 	}
 	//look at coordinates 
 	//set those coordinates in the grid to 1
 	//if its on last row or there 1 under 
-
-
-
+	return isSet;
 }
 
 //makes the shape fall by one box 
@@ -83,15 +134,6 @@ void Shapes::fall(int arr[20][10]){
 	for (int r = 0; r < positionLength_; r++) {
 		coordinates_[r][0] = coordinates_[r][0]+1;
 	}
-	for (int row = 0; row < positionLength_; row++) {
-		for (int col = 0; col < 2; col++) {
-			cout << coordinates_[row][col];
-		}
-		cout << endl;
-	}
-
-
-
 }
 //moves horiontally updates grid and coorindates
 void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
@@ -233,7 +275,6 @@ void Shapes::colorOne(int arr[20][10]) {
 }
 
 void Shapes::colorTwo(int arr[20][10]) {
-	cout << "calling color 2";
 	arr[0][5] = 2;
 	arr[1][5] = 2;
 	arr[2][5] = 2;
@@ -292,6 +333,7 @@ void Shapes::colorThree(int arr[20][10]) {
 }
 
 void Shapes::colorFour(int arr[20][10]) {
+	cout << "color 4";
 	arr[0][5] = 2;
 	arr[1][5] = 2;
 	arr[2][5] = 2;
