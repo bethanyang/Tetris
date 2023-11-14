@@ -26,6 +26,8 @@ using namespace std;
 void printGrid(int arr[20][10]);
 void displayGraph(int arr[20][10], int color);
 void showScore(int score);
+void gameOver(int arr[20][10], int score, bool &pA, bool &kG);
+
 int main()
 {
 	//Variable Declarations
@@ -33,11 +35,12 @@ int main()
 	bool keepGoing = true;       // keep running while this is true
 	char keyPressed;
 	int score = 0;
+	bool playAgain = true;
 	//declaring array for grid
 	int grid[20][10];
 
 	// Open a graphics window size 400 pixels wide x 800 pixels high
-	initwindow(413, 1000);
+	initwindow(413, 870);
 	//putting 0 in every place which represents an empty slot
 	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
@@ -64,50 +67,55 @@ int main()
 	Shapes currentShape(randColor, grid);
 
 	int delayPace = 500;
-	// Main Loop - Keep running until user quits (while keepGoing is true)
-	while (keepGoing) {
-		delay(delayPace);
-		if (currentShape.set(grid)) {
-			delayPace = 500;
-			randColor = randomInt(generator);
-			currentShape = Shapes(randColor, grid);
-		}
-		currentShape.fall(grid);
-		displayGraph(grid, currentShape.getColor());
-		for (int r = 19; r >= 0; r--) {
-			if (currentShape.canClear(grid, r)) {
-				currentShape.clearLine(grid, r);
+	do {
+		// Main Loop - Keep running until user quits (while keepGoing is true)
+		while (keepGoing) {
+			delay(delayPace);
+			if (currentShape.set(grid, score)) {
+				delayPace = 500;
+				randColor = randomInt(generator);
+				currentShape = Shapes(randColor, grid);
 			}
-		}
-		if (currentShape.gameOver(grid)) {
-			keepGoing = false;
-		}
-		if (kbhit()) {
-			keyPressed = getch();
-			if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
+			currentShape.fall(grid);
+			displayGraph(grid, currentShape.getColor());
+			showScore(score);
+			for (int r = 19; r >= 0; r--) {
+				if (currentShape.canClear(grid, r)) {
+					currentShape.clearLine(grid, r);
+					score += 90;
+				}
+			}
+			if (currentShape.gameOver(grid)) {
 				keepGoing = false;
 			}
-			if (keyPressed == 'g') {
-				if (currentShape.updateLeftHorizontalPosition(grid, keyPressed)) {
-					currentShape.moveHorizontal(grid, keyPressed);
+			if (kbhit()) {
+				keyPressed = getch();
+				if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
+					keepGoing = false;
 				}
-				printGrid(grid);
-			}
-			if (keyPressed == 'j') {
-				if (currentShape.updateRightHorizontalPosition(grid, keyPressed)) {
-					currentShape.moveHorizontal(grid, keyPressed);
+				if (keyPressed == 'g') {
+					if (currentShape.updateLeftHorizontalPosition(grid, keyPressed)) {
+						currentShape.moveHorizontal(grid, keyPressed);
+					}
+					printGrid(grid);
 				}
-				printGrid(grid);
-			}
-			if (keyPressed == ' ') {
-				delayPace = 10;
-			}
-			displayGraph(grid, currentShape.getColor());
+				if (keyPressed == 'j') {
+					if (currentShape.updateRightHorizontalPosition(grid, keyPressed)) {
+						currentShape.moveHorizontal(grid, keyPressed);
+					}
+					printGrid(grid);
+				}
+				if (keyPressed == ' ') {
+					delayPace = 10;
+				}
+				displayGraph(grid, currentShape.getColor());
 
+			}
+
+			printGrid(grid);
 		}
-
-		printGrid(grid);
-	}
+		gameOver(grid, score, playAgain, keepGoing);
+	} while (playAgain);
 	// end while keepGoing
 		//for testing what is inside of the grid
 	closegraph(); // shut down the graphics window
@@ -132,7 +140,8 @@ void showScore(int score) {
 	sprintf_s(s, "Score: %d", score);
 
 	setcolor(WHITE);
-	outtextxy(800, 20, &s[0]);
+	outtextxy(20, 820, &s[0]);
+
 }
 
 void displayGraph(int arr[20][10], int color) {
@@ -198,5 +207,63 @@ void displayGraph(int arr[20][10], int color) {
 		line(c, 0, c, 800);
 	}
 	line(400, 0, 400, 800);
+
+}
+
+void gameOver(int arr[20][10], int score, bool &pA, bool &kG){
+	
+	setcolor(BLUE);
+	setfillstyle(SOLID_FILL, BLUE);
+	bar(0, 0, 413, 870);
+	
+	//413 by 870
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	setcolor(WHITE);
+//prints score
+	char s[30];
+	sprintf_s(s, "Score: %d", score);
+
+	setcolor(WHITE);
+	outtextxy(206, 200, &s[0]);
+	//prints game over 
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 5);
+	outtextxy(206, 300, (char*)"GAME OVER!");
+
+	//print choose p or choose x
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+	outtextxy(206, 450, (char*)"Press 'p' to play again");
+
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+	outtextxy(206, 550, (char*)"Press 'x' to exit");
+	char keyPressed;
+
+	if (kbhit()) {
+		keyPressed = getch();
+		if (keyPressed == 'p') {
+			for (int r = 0; r < 20; r++) {
+				for (int c = 0; c < 10; c++) {
+					arr[r][c] = 0;
+				}
+			}
+			pA = true;
+			kG = true;
+
+		}
+	}
+		//else if(keyPressed == 'x'){
+
+
+	// show the score
+	// click p to play again click x to exit
+	// //if p grid 
+	//if yes create empty grid and restart
+	/*
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			if (arr[r][c] == 2) {
+				
+		}
+	}*/
+
 
 }
