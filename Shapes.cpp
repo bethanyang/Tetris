@@ -76,7 +76,7 @@ int Shapes::getColor() {
 	return this->color_;
 }
 //set shape into 1s 
-bool Shapes::set(int arr[20][10]) {
+bool Shapes::set(int arr[20][10], int &s) {
 	bool isSet = false;
 	int posX, posY;
 	for (int i = 0; i < 4; i++) {
@@ -92,6 +92,7 @@ bool Shapes::set(int arr[20][10]) {
 			posY = coordinates_[i][0];
 			arr[posY][posX] = 1;
 		}
+		s += 10;
 	}
 	//look at coordinates 
 	//set those coordinates in the grid to 1
@@ -265,10 +266,7 @@ void Shapes::colorOne(int arr[20][10]) {
 	1, 5
 	*/
 
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(YELLOW);
-	setfillstyle(SOLID_FILL, YELLOW);
-	bar(160, 0, 240, 80);
+	
 
 }
 
@@ -295,10 +293,7 @@ void Shapes::colorTwo(int arr[20][10]) {
 	2, 5
 	3, 5
 	*/
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(BLUE);
-	setfillstyle(SOLID_FILL, BLUE);
-	bar(160, 0, 240, 80);
+	
 }
 
 void Shapes::colorThree(int arr[20][10]) {
@@ -324,10 +319,7 @@ void Shapes::colorThree(int arr[20][10]) {
 	2, 4
 	2, 5
 	*/
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(BLUE);
-	setfillstyle(SOLID_FILL, BLUE);
-	bar(160, 0, 240, 80);
+
 }
 
 void Shapes::colorFour(int arr[20][10]) {
@@ -354,8 +346,6 @@ void Shapes::colorFour(int arr[20][10]) {
 	2, 4
 	*/
 
-	cout << " end constructor";
-
 }
 
 void Shapes::colorFive(int arr[20][10]) {
@@ -381,10 +371,7 @@ void Shapes::colorFive(int arr[20][10]) {
 	1, 5
 	2, 4
 	*/
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(BLUE);
-	setfillstyle(SOLID_FILL, BLUE);
-	bar(160, 0, 240, 80);
+
 }
 void Shapes::colorSix(int arr[20][10]) {
 	arr[0][4] = 2;
@@ -409,8 +396,4 @@ void Shapes::colorSix(int arr[20][10]) {
 	1, 5
 	2, 5
 	*/
-	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
-	setcolor(BLUE);
-	setfillstyle(SOLID_FILL, BLUE);
-	bar(160, 0, 240, 80);
 }
