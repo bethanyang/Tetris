@@ -26,13 +26,14 @@ using namespace std;
 void printGrid(int arr[20][10]);
 void displayGraph(int arr[20][10], int color);
 void showScore(int score);
-void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c);
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c);
+void welcome(int arr[20][10], int& score, bool& pA, bool& kG, int c);
 
 int main()
 {
 	//Variable Declarations
 	int randColor = 0;
-	bool keepGoing = true;       // keep running while this is true
+	bool keepGoing = false;       // keep running while this is true
 	char keyPressed;
 	int score = 0;
 	bool playAgain = true;
@@ -67,8 +68,28 @@ int main()
 	Shapes currentShape(randColor, grid);
 
 	int delayPace = 500;
+	char toStart = 'h';
+	while (toStart != 's') {
+		welcome(grid, score, playAgain, keepGoing, currentShape.getColor());
+		if (kbhit()) {
+			toStart = getch();
+			keepGoing = true;
+		}
+		delay(1000);
+	}
+	
+
 	do {
+		
+
+
+
+
 		// Main Loop - Keep running until user quits (while keepGoing is true)
+
+
+
+
 		while (keepGoing) {
 			delay(delayPace);
 			if (currentShape.set(grid, score)) {
@@ -114,7 +135,9 @@ int main()
 
 			printGrid(grid);
 		}
-		gameOver(grid, score, playAgain, keepGoing, currentShape.getColor());
+		endGame(grid, score, playAgain, keepGoing, currentShape.getColor());
+		randColor = randomInt(generator);
+		currentShape = Shapes(randColor, grid);
 	} while (playAgain);
 	// end while keepGoing
 		//for testing what is inside of the grid
@@ -136,13 +159,13 @@ void printGrid(int arr[20][10]) {
 
 void showScore(int score) {
 	// Draw score on the screen
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
 	settextjustify(LEFT_TEXT, TOP_TEXT);
 	char s[20];
 	sprintf_s(s, "Score: %d", score);
 
 	setcolor(WHITE);
 	outtextxy(20, 820, &s[0]);
-	cout << "show score";
 
 }
 
@@ -212,7 +235,7 @@ void displayGraph(int arr[20][10], int color) {
 
 }
 
-void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c){
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c){
 	
 	setcolor(BLUE);
 	setfillstyle(SOLID_FILL, BLUE);
@@ -253,6 +276,7 @@ void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c){
 			setcolor(BLACK);
 			setfillstyle(SOLID_FILL, BLACK);
 			bar(0, 801, 413, 870);
+			score = 0;
 		}
 		else if (keyPressed == 'x') {
 			pA = false;
@@ -260,20 +284,36 @@ void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c){
 		}
 	}
 	delay(1000);
-		//else if(keyPressed == 'x'){
 
+}
 
-	// show the score
-	// click p to play again click x to exit
-	// //if p grid 
-	//if yes create empty grid and restart
-	/*
-	for (int r = 0; r < 20; r++) {
-		for (int c = 0; c < 10; c++) {
-			if (arr[r][c] == 2) {
-				
-		}
-	}*/
+void welcome(int arr[20][10], int& score, bool& pA, bool& kG, int c) {
+	//creates black screen
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL, BLACK);
+	bar(0, 0, 413, 870);
+
+	//writes welcome to tetris
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	setcolor(MAGENTA);
+	settextstyle(GOTHIC_FONT, HORIZ_DIR, 4.5);
+	outtextxy(206, 80, (char*)"Welcome to");
+	outtextxy(206, 120, (char*)"BABY TETRIS");
+
+	settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+	setcolor(WHITE);
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	outtextxy(206, 200, (char*)"Clear as many complete");
+	outtextxy(206, 240, (char*)"horizontal lines of blocks.");
+	outtextxy(206, 300, (char*)"Magic keys...");
+	// space
+	outtextxy(206, 340, (char*)"Press");
+	outtextxy(206, 380, (char*)"' '(space bar) to accelerate");
+	outtextxy(206, 420, (char*)"a shape down");
+	outtextxy(206, 460, (char*)"'g' to move left");
+	outtextxy(206, 500, (char*)"'j' to move right");
+
+	outtextxy(206, 600, (char*)"Press 's' to start now");
 
 
 }
