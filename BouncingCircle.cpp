@@ -130,7 +130,7 @@ int main()
 					printGrid(grid);
 				}
 				if (keyPressed == ' ') {
-					delayPace = 10;
+					delayPace = 5;
 				}
 				displayGraph(grid, currentShape.getColor());
 
