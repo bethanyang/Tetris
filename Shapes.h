@@ -20,7 +20,7 @@ public:
 	bool updateLeftHorizontalPosition(int arr[20][10], char letterEntered);
 	bool updateRightHorizontalPosition(int arr[20][10], char letterEntered);
 	void moveHorizontal(int arr[20][10], char letterEntered);
-	bool set(int arr[20][10]);
+	bool set(int arr[20][10], int &s);
 	void fall(int arr[20][10]);
 	void colorOne(int arr[20][10]);
 	void colorTwo(int arr[20][10]);
