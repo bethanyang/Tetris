@@ -26,8 +26,8 @@ using namespace std;
 void printGrid(int arr[20][10]);
 void displayGraph(int arr[20][10], int color);
 void showScore(int score);
-void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c);
-void welcome(int arr[20][10], int& score, bool& pA, bool& kG, int c);
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c, char& start);
+void welcome();
 
 int main()
 {
@@ -70,12 +70,15 @@ int main()
 	int delayPace = 500;
 	char toStart = 'h';
 	while (toStart != 's') {
-		welcome(grid, score, playAgain, keepGoing, currentShape.getColor());
+		welcome();
 		if (kbhit()) {
 			toStart = getch();
-			keepGoing = true;
+			if (toStart == 's') {
+				keepGoing = true;
+			}
+
 		}
-		delay(1000);
+		delay(100);
 	}
 	
 
@@ -135,7 +138,7 @@ int main()
 
 			printGrid(grid);
 		}
-		endGame(grid, score, playAgain, keepGoing, currentShape.getColor());
+		endGame(grid, score, playAgain, keepGoing, currentShape.getColor(), toStart);
 		randColor = randomInt(generator);
 		currentShape = Shapes(randColor, grid);
 	} while (playAgain);
@@ -235,7 +238,7 @@ void displayGraph(int arr[20][10], int color) {
 
 }
 
-void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c){
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c, char &start){
 	
 	setcolor(BLUE);
 	setfillstyle(SOLID_FILL, BLUE);
@@ -270,13 +273,25 @@ void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c){
 					arr[r][c] = 0;
 				}
 			}
+			start = 'h';
 			pA = true;
-			kG = true;
 			displayGraph(arr, c);
 			setcolor(BLACK);
 			setfillstyle(SOLID_FILL, BLACK);
 			bar(0, 801, 413, 870);
 			score = 0;
+			while (start != 's') {
+				welcome();
+				if (kbhit()) {
+					start = getch();
+					if (start == 's') {
+						kG = true;
+					}
+
+				}
+				delay(100);
+			}
+			welcome();
 		}
 		else if (keyPressed == 'x') {
 			pA = false;
@@ -287,7 +302,7 @@ void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c){
 
 }
 
-void welcome(int arr[20][10], int& score, bool& pA, bool& kG, int c) {
+void welcome() {
 	//creates black screen
 	setcolor(BLACK);
 	setfillstyle(SOLID_FILL, BLACK);
@@ -312,8 +327,9 @@ void welcome(int arr[20][10], int& score, bool& pA, bool& kG, int c) {
 	outtextxy(206, 420, (char*)"a shape down");
 	outtextxy(206, 460, (char*)"'g' to move left");
 	outtextxy(206, 500, (char*)"'j' to move right");
+	outtextxy(206, 540, (char*)"'q' to quit");
 
-	outtextxy(206, 600, (char*)"Press 's' to start now");
+	outtextxy(206, 640, (char*)"Press 's' to start now");
 
 
 }
