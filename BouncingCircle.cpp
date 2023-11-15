@@ -26,7 +26,7 @@ using namespace std;
 void printGrid(int arr[20][10]);
 void displayGraph(int arr[20][10], int color);
 void showScore(int score);
-void gameOver(int arr[20][10], int score, bool &pA, bool &kG);
+void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c);
 
 int main()
 {
@@ -114,7 +114,7 @@ int main()
 
 			printGrid(grid);
 		}
-		gameOver(grid, score, playAgain, keepGoing);
+		gameOver(grid, score, playAgain, keepGoing, currentShape.getColor());
 	} while (playAgain);
 	// end while keepGoing
 		//for testing what is inside of the grid
@@ -136,11 +136,13 @@ void printGrid(int arr[20][10]) {
 
 void showScore(int score) {
 	// Draw score on the screen
+	settextjustify(LEFT_TEXT, TOP_TEXT);
 	char s[20];
 	sprintf_s(s, "Score: %d", score);
 
 	setcolor(WHITE);
 	outtextxy(20, 820, &s[0]);
+	cout << "show score";
 
 }
 
@@ -210,7 +212,7 @@ void displayGraph(int arr[20][10], int color) {
 
 }
 
-void gameOver(int arr[20][10], int score, bool &pA, bool &kG){
+void gameOver(int arr[20][10], int score, bool &pA, bool &kG, int c){
 	
 	setcolor(BLUE);
 	setfillstyle(SOLID_FILL, BLUE);
@@ -247,9 +249,17 @@ void gameOver(int arr[20][10], int score, bool &pA, bool &kG){
 			}
 			pA = true;
 			kG = true;
-
+			displayGraph(arr, c);
+			setcolor(BLACK);
+			setfillstyle(SOLID_FILL, BLACK);
+			bar(0, 801, 413, 870);
+		}
+		else if (keyPressed == 'x') {
+			pA = false;
+			kG = false;
 		}
 	}
+	delay(1000);
 		//else if(keyPressed == 'x'){
 
 
