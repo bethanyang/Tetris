@@ -1,404 +1,335 @@
+// BouncingCircle.cpp - v3, 2023-08
+// Edited by: PUT YOUR NAME HERE, and the DATE
+//
+// This program illustrates some basic graphics functions, control structures,
+// and ways to use variables.
+//
+// Key Commands:
+// G - Toggle Gravity
+// T - Toggle Trails
+// C - Toggle changing colors
+// Q or ESC - Quit
+//
+// Click mouse to change position of the circle
+
+#include "graphics.h"
+#include <iostream>
 #include "Shapes.h"
 #include <string>
-#include <iostream>
+#include <random>
+#include <vector>
 #include <map>
-#include "graphics.h"
-
 using namespace std;
 
-Shapes::Shapes() {}
 
-Shapes::Shapes(int color, int arr[20][10]) {
-	this->color_ = color;
+//functions
+void printGrid(int arr[20][10]);
+void displayGraph(int arr[20][10], int color);
+void showScore(int score);
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c, char& start);
+void welcome();
 
-	if (color_ == 1) {
-		colorOne(arr);
-	}
-	else if (color_ == 2) {
-		colorTwo(arr);
-	}
-	else if (color_ == 3) {
-		colorThree(arr);
-	}
-	else if (color_ == 4) {
-		colorFour(arr);
-	}
-	else if (color_ == 5) {
-		colorFive(arr);
-	}
-	else if (color_ == 6) {
-		colorSix(arr);
-	}
-}
-void Shapes::clearLine(int arr[20][10], int row) {
-	for (int c = 0; c < 10; c++) {
-		arr[row][c] = 0;
-	}
+int main()
+{
+	//Variable Declarations
+	int randColor = 0;
+	bool keepGoing = false;       // keep running while this is true
+	char keyPressed;
+	int score = 0;
+	bool playAgain = true;
+	//declaring array for grid
+	int grid[20][10];
 
-	//0,0
-	//1,0
-
-
-	for (int r = row; r >= 1; r--) {
+	// Open a graphics window size 400 pixels wide x 800 pixels high
+	initwindow(413, 870);
+	//putting 0 in every place which represents an empty slot
+	for (int r = 0; r < 20; r++) {
 		for (int c = 0; c < 10; c++) {
-			arr[r][c] = arr[r - 1][c];
-
+			grid[r][c] = 0;
 		}
 	}
 
-}
-bool Shapes::canClear(int arr[20][10], int row) {
-	bool clear = false;
-	int posX, posY;
-	for (int c = 0; c < 10; c++) {
-		if (arr[row][c] == 1) {
-			clear = true;
-		}
-		else {
-			return false;
-		}
-	}
-	return clear;
-}
-bool Shapes::gameOver(int arr[20][10]) {
-	int posX, posY;
-	bool done = false;
-	for (int i = 0; i < 4; i++) {
-		posX = coordinates_[i][1];
-		posY = coordinates_[i][0];
-		if (posY - 1 == -1) {
-			done = true;
-		}
-	}
-	return done;
-}
-int Shapes::getColor() {
-	return this->color_;
-}
-//set shape into 1s 
-bool Shapes::set(int arr[20][10], int& s) {
-	bool isSet = false;
-	int posX, posY;
-	for (int i = 0; i < 4; i++) {
-		posX = coordinates_[i][1];
-		posY = coordinates_[i][0];
-		if (posY + 1 == 20 || arr[posY + 1][posX] == 1) {
-			isSet = true;
-		}
-	}
-	if (isSet) {
-		for (int i = 0; i < 4; i++) {
-			posX = coordinates_[i][1];
-			posY = coordinates_[i][0];
-			arr[posY][posX] = 1;
-		}
-		s += 10;
-	}
-	//look at coordinates 
-	//set those coordinates in the grid to 1
-	//if its on last row or there 1 under 
-	//won gzen wei 
-	// huang pei jun 
-	// won rong un 9/10 
-	//cool brother won how un hayden 9/10
-	//baby boi won tien un baby tristy 6.5/10
-	return isSet;
-}
 
-//makes the shape fall by one box 
-void Shapes::fall(int arr[20][10]) {
-	// get y value in the coordinates 
-	//check to see if that y value under grid is 0 or itself if true everything moves down a box
-	//update coordinates to reflect that 
-	int temp; //gonna start crying really quick
-	bool ableToMove = true;
-	int posX, posY;
-	for (int i = 0; i < 4; i++) {
-		posX = coordinates_[i][1];
-		posY = coordinates_[i][0];
-		if (posY + 1 < 20) {
-			if (arr[posY + 1][posX] == 0 || arr[posY + 1][posX] == 2) {
-				ableToMove = true;
+
+	//random int for construcor color
+	/*
+	1 = yellow square
+	2 = light blue line
+	3 = orange l
+	4 = backward dark blue l
+	5 = green
+	6 = red
+
+	*/
+	random_device generator;
+	uniform_int_distribution<int> randomInt(1, 6);
+	randColor = randomInt(generator);
+	//declaring current shape 
+	Shapes currentShape(randColor, grid);
+
+	int delayPace = 500;
+	char toStart = 'h';
+	while (toStart != 's') {
+		welcome();
+		if (kbhit()) {
+			toStart = getch();
+			if (toStart == 's') {
+				keepGoing = true;
 			}
-			else {
-				return;
-			};
+
 		}
-		else {
-			return;
+		delay(100);
+	}
+	
+
+	do {
+		
+
+
+
+
+		// Main Loop - Keep running until user quits (while keepGoing is true)
+
+
+
+
+		while (keepGoing) {
+			delay(delayPace);
+			if (currentShape.set(grid, score)) {
+				delayPace = 500;
+				randColor = randomInt(generator);
+				currentShape = Shapes(randColor, grid);
+			}
+			currentShape.fall(grid);
+			displayGraph(grid, currentShape.getColor());
+			showScore(score);
+			for (int r = 19; r >= 0; r--) {
+				if (currentShape.canClear(grid, r)) {
+					currentShape.clearLine(grid, r);
+					score += 90;
+				}
+			}
+			if (currentShape.gameOver(grid)) {
+				keepGoing = false;
+			}
+			if (kbhit()) {
+				keyPressed = getch();
+				if (keyPressed == 'q' || keyPressed == 'Q' || keyPressed == 0x1b) {  // q - quit, 0x1b is ESC key
+					keepGoing = false;
+				}
+				if (keyPressed == 'g') {
+					if (currentShape.updateLeftHorizontalPosition(grid, keyPressed)) {
+						currentShape.moveHorizontal(grid, keyPressed);
+					}
+					printGrid(grid);
+				}
+				if (keyPressed == 'j') {
+					if (currentShape.updateRightHorizontalPosition(grid, keyPressed)) {
+						currentShape.moveHorizontal(grid, keyPressed);
+					}
+					printGrid(grid);
+				}
+				if (keyPressed == ' ') {
+					delayPace = 5;
+				}
+				displayGraph(grid, currentShape.getColor());
+
+			}
+
+			printGrid(grid);
 		}
-	}
-	for (int i = 3; i >= 0; i--) {
-		posX = coordinates_[i][1];
-		posY = coordinates_[i][0];
-		arr[posY][posX] = 0;
-		arr[posY + 1][posX] = 2;
-	}
-	//changes coordinates of the object 
-	for (int r = 0; r < positionLength_; r++) {
-		coordinates_[r][0] = coordinates_[r][0] + 1;
-	}
+		endGame(grid, score, playAgain, keepGoing, currentShape.getColor(), toStart);
+		randColor = randomInt(generator);
+		currentShape = Shapes(randColor, grid);
+	} while (playAgain);
+	// end while keepGoing
+		//for testing what is inside of the grid
+	closegraph(); // shut down the graphics window
+	//printGrid(grid);
+	return 0;
+
 }
-//moves horiontally updates grid and coorindates
-void Shapes::moveHorizontal(int arr[20][10], char letterEntered) {
-	int temp = 0; //for swapping later
-	int shift;
-	if (letterEntered == 'g') {
-		shift = -1;
-	}
-	else {
-		shift = 1;
-	}
-	int posX, posY;
-	if (letterEntered == 'j') {
-		for (int r = 3; r >= 0; r--) {
-			posX = coordinates_[r][1];
-			posY = coordinates_[r][0];
-			//switches current value and value to the left on the grid
-			temp = arr[posY][posX];
-			//takes current position(x) of each box and moves it to the left one on the grid
-			arr[posY][posX] = arr[posY][posX + shift];
-			//takes (x) and changes it to 0 i hope this is so tragic
-			arr[posY][posX + shift] = temp;
-		}
-	}
-	else if (letterEntered == 'g') {
-		for (int r = 0; r < positionLength_; r++) {
-			posX = coordinates_[r][1];
-			posY = coordinates_[r][0];
-			//switches current value and value to the left on the grid
-			temp = arr[posY][posX];
-			//takes current position(x) of each box and moves it to the left one on the grid
-			arr[posY][posX] = arr[posY][posX + shift];
-			//takes (x) and changes it to 0 i hope this is so tragic
-			arr[posY][posX + shift] = temp;
 
-		}
-	}
 
-	//changes coordinates of the object 
-	for (int r = 0; r < positionLength_; r++) {
-		coordinates_[r][1] = (coordinates_[r][1]) + shift;
-	}
-	//prints out new coordinates 
-	for (int row = 0; row < positionLength_; row++) {
-		for (int col = 0; col < 2; col++) {
-			cout << coordinates_[row][col];
+void printGrid(int arr[20][10]) {
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			cout << arr[r][c];
 		}
 		cout << endl;
 	}
-
-	cout << endl << "finished this trama" << endl;
 }
 
-//checks to see if you can move left
-bool Shapes::updateLeftHorizontalPosition(int arr[20][10], char letterEntered) {
-	bool ableToMove = true;
-	int posX, posY;
-	//if its g we are moving to the left 
-	for (int i = 0; i < positionLength_; i++) {
-		posY = coordinates_[i][0];
-		posX = coordinates_[i][1];
-		if (posX != 0) {
-			if (arr[posY][posX - 1] == 0 || arr[posY][posX - 1] == 2) {
-				ableToMove = true;
+void showScore(int score) {
+	// Draw score on the screen
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+	settextjustify(LEFT_TEXT, TOP_TEXT);
+	char s[20];
+	sprintf_s(s, "Score: %d", score);
+
+	setcolor(WHITE);
+	outtextxy(20, 820, &s[0]);
+
+}
+
+void displayGraph(int arr[20][10], int color) {
+	//sees what color is the shape
+	string COLOR;
+	switch (color) {
+	case 1:
+		COLOR = "YELLOW";
+		break;
+
+	case 2:
+		COLOR = "CYAN";
+		break;
+
+	case 3:
+		COLOR = "BROWN";
+		break;
+
+	case 4:
+		COLOR = "BLUE";
+		break;
+
+	case 5:
+		COLOR = "GREEN";
+		break;
+
+	case 6:
+		COLOR = "RED";
+	}
+
+	//bar(amount from the left, start point from top, second amount from left, where the bottom is 
+
+	for (int r = 0; r < 20; r++) {
+		for (int c = 0; c < 10; c++) {
+			if (arr[r][c] == 2) {
+				setcolor(color);
+				setfillstyle(SOLID_FILL, color);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
+			}
+			else if (arr[r][c] == 1) {
+				setcolor(LIGHTGRAY);
+				setfillstyle(SOLID_FILL, LIGHTGRAY);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
 			}
 			else {
-				return false;
-			}
+				setcolor(BLACK);
+				setfillstyle(SOLID_FILL, BLACK);
+				bar(40 * c, 40 * r, 40 + (40 * c), 40 + (40 * r));
 
-		}
-		else {
-			return false;
+			}
 		}
 	}
-	return ableToMove;
-}
-bool Shapes::updateRightHorizontalPosition(int arr[20][10], char letterEntered) {
-	bool ableToMove = true;
-	int posX, posY;
-	//if its g we are moving to the left 
-	for (int i = 0; i < positionLength_; i++) {
-		posY = coordinates_[i][0];
-		posX = coordinates_[i][1];
-		if (posX != 9) {
-			if (arr[posY][posX + 1] == 0 || arr[posY][posX + 1] == 2) {
-				ableToMove = true;
-			}
-			else {
-				return false;
-			}
+	//bar(40*4, 40*2, 40 + 160, 40 + 80);
+	//creates grid 
+	setcolor(WHITE);
+	setlinestyle(SOLID_LINE, 0, 1);
+	for (int r = 40; r < 800; r += 40) {
+		line(0, r, 400, r);
+	}
+	line(0, 800, 400, 800);
 
+	for (int c = 40; c < 400; c += 40) {
+		line(c, 0, c, 800);
+	}
+	line(400, 0, 400, 800);
+
+}
+
+void endGame(int arr[20][10], int &score, bool &pA, bool &kG, int c, char &start){
+	
+	setcolor(BLUE);
+	setfillstyle(SOLID_FILL, BLUE);
+	bar(0, 0, 413, 870);
+	
+	//413 by 870
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	setcolor(WHITE);
+//prints score
+	char s[30];
+	sprintf_s(s, "Score: %d", score);
+
+	setcolor(WHITE);
+	outtextxy(206, 200, &s[0]);
+	//prints game over 
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 5);
+	outtextxy(206, 300, (char*)"GAME OVER!");
+
+	//print choose p or choose x
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+	outtextxy(206, 450, (char*)"Press 'p' to play again");
+
+	settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+	outtextxy(206, 550, (char*)"Press 'x' to exit");
+	char keyPressed;
+
+	if (kbhit()) {
+		keyPressed = getch();
+		if (keyPressed == 'p') {
+			for (int r = 0; r < 20; r++) {
+				for (int c = 0; c < 10; c++) {
+					arr[r][c] = 0;
+				}
+			}
+			start = 'h';
+			pA = true;
+			displayGraph(arr, c);
+			setcolor(BLACK);
+			setfillstyle(SOLID_FILL, BLACK);
+			bar(0, 801, 413, 870);
+			score = 0;
+			while (start != 's') {
+				welcome();
+				if (kbhit()) {
+					start = getch();
+					if (start == 's') {
+						kG = true;
+					}
+
+				}
+				delay(100);
+			}
+			welcome();
 		}
-		else {
-			return false;
+		else if (keyPressed == 'x') {
+			pA = false;
+			kG = false;
 		}
 	}
-	return ableToMove;
-}
-
-
-
-
-//check grid to see if x value -1 of coordinates = 0 
-//if it is move x coordinates to left one which means - 1
-//move grid coordinates r - 1 to equal 2 and change previous positions to 0
-
-//create bool thats true as long as everything to left is always 0
-
-//Each shape 
-void Shapes::colorOne(int arr[20][10]) {
-	arr[0][4] = 2;
-	arr[0][5] = 2;
-	arr[1][4] = 2;
-	arr[1][5] = 2;
-
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 4;
-
-	this->coordinates_[1][0] = 0;
-	this->coordinates_[1][1] = 5;
-
-	this->coordinates_[2][0] = 1;
-	this->coordinates_[2][1] = 4;
-
-	this->coordinates_[3][0] = 1;
-	this->coordinates_[3][1] = 5;
-	/*
-	0, 4
-	0, 5
-	1, 4
-	1, 5
-	*/
-
-
+	delay(1000);
 
 }
 
-void Shapes::colorTwo(int arr[20][10]) {
-	arr[0][5] = 2;
-	arr[1][5] = 2;
-	arr[2][5] = 2;
-	arr[3][5] = 2;
+void welcome() {
+	//creates black screen
+	setcolor(BLACK);
+	setfillstyle(SOLID_FILL, BLACK);
+	bar(0, 0, 413, 870);
 
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 5;
+	//writes welcome to tetris
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	setcolor(MAGENTA);
+	settextstyle(GOTHIC_FONT, HORIZ_DIR, 4.5);
+	outtextxy(206, 80, (char*)"Welcome to");
+	outtextxy(206, 120, (char*)"BABY TETRIS");
 
-	this->coordinates_[1][0] = 1;
-	this->coordinates_[1][1] = 5;
+	settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+	setcolor(WHITE);
+	settextjustify(CENTER_TEXT, TOP_TEXT);
+	outtextxy(206, 200, (char*)"Clear as many complete");
+	outtextxy(206, 240, (char*)"horizontal lines of blocks.");
+	outtextxy(206, 300, (char*)"Magic keys...");
+	// space
+	outtextxy(206, 340, (char*)"Press");
+	outtextxy(206, 380, (char*)"' '(space bar) to accelerate");
+	outtextxy(206, 420, (char*)"a shape down");
+	outtextxy(206, 460, (char*)"'g' to move left");
+	outtextxy(206, 500, (char*)"'j' to move right");
+	outtextxy(206, 540, (char*)"'q' to quit");
 
-	this->coordinates_[2][0] = 2;
-	this->coordinates_[2][1] = 5;
+	outtextxy(206, 640, (char*)"Press 's' to start now");
 
-	this->coordinates_[3][0] = 3;
-	this->coordinates_[3][1] = 5;
-	/*
-	0, 5
-	1, 5
-	2, 5
-	3, 5
-	*/
 
-}
-
-void Shapes::colorThree(int arr[20][10]) {
-	arr[0][4] = 2;
-	arr[1][4] = 2;
-	arr[2][4] = 2;
-	arr[2][5] = 2;
-
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 4;
-
-	this->coordinates_[1][0] = 1;
-	this->coordinates_[1][1] = 4;
-
-	this->coordinates_[2][0] = 2;
-	this->coordinates_[2][1] = 4;
-
-	this->coordinates_[3][0] = 2;
-	this->coordinates_[3][1] = 5;
-	/*
-	0, 4
-	1, 4
-	2, 4
-	2, 5
-	*/
-
-}
-
-void Shapes::colorFour(int arr[20][10]) {
-	arr[0][5] = 2;
-	arr[1][5] = 2;
-	arr[2][5] = 2;
-	arr[2][4] = 2;
-
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 5;
-
-	this->coordinates_[1][0] = 1;
-	this->coordinates_[1][1] = 5;
-
-	this->coordinates_[2][0] = 2;
-	this->coordinates_[2][1] = 4;
-
-	this->coordinates_[3][0] = 2;
-	this->coordinates_[3][1] = 5;
-	/*
-	0, 5
-	1, 5
-	2, 5
-	2, 4
-	*/
-
-}
-
-void Shapes::colorFive(int arr[20][10]) {
-	arr[0][5] = 2;
-	arr[1][4] = 2;
-	arr[1][5] = 2;
-	arr[2][4] = 2;
-
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 5;
-
-	this->coordinates_[1][0] = 1;
-	this->coordinates_[1][1] = 4;
-
-	this->coordinates_[2][0] = 1;
-	this->coordinates_[2][1] = 5;
-
-	this->coordinates_[3][0] = 2;
-	this->coordinates_[3][1] = 4;
-	/*
-	0, 5
-	1, 4
-	1, 5
-	2, 4
-	*/
-
-}
-void Shapes::colorSix(int arr[20][10]) {
-	arr[0][4] = 2;
-	arr[1][4] = 2;
-	arr[1][5] = 2;
-	arr[2][5] = 2;
-
-	this->coordinates_[0][0] = 0;
-	this->coordinates_[0][1] = 4;
-
-	this->coordinates_[1][0] = 1;
-	this->coordinates_[1][1] = 4;
-
-	this->coordinates_[2][0] = 1;
-	this->coordinates_[2][1] = 5;
-
-	this->coordinates_[3][0] = 2;
-	this->coordinates_[3][1] = 5;
-	/*
-	0, 4
-	1, 4
-	1, 5
-	2, 5
-	*/
 }
