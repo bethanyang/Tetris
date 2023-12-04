@@ -135,6 +135,9 @@ int main()
 				displayGraph(grid, currentShape.getColor());
 
 			}
+			while(kbhit()){
+				keyPressed = getch();
+			}
 
 			printGrid(grid);
 		}
